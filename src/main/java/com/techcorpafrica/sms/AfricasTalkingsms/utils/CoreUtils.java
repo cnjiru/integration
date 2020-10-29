@@ -6,8 +6,23 @@ import com.techcorpafrica.sms.africastalkingsms.config.AppConfigs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.africastalking.AfricasTalking;
+import com.africastalking.SmsService;
+import com.africastalking.sms.Recipient;
+import com.techcorpafrica.sms.africastalkingsms.config.AppConfigs;
+import com.techcorpafrica.sms.africastalkingsms.dto.RequestDTO;
+import com.techcorpafrica.sms.africastalkingsms.dto.ResponseDTO;
+import com.techcorpafrica.sms.AfricasTalkingsms.utils.CoreUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 
@@ -18,7 +33,7 @@ public class CoreUtils {
     @Autowired
     private AppConfigs appConfigs;
 
-    private static StringBuffer convertToUnicode(String regText) {
+    private StringBuffer convertToUnicode(String regText) {
         char[] chars = regText.toCharArray();
         StringBuffer hexString = new StringBuffer();
         for (char aChar : chars) {
@@ -32,13 +47,14 @@ public class CoreUtils {
             hexString.append(iniHexString);
         }
 	try {
-              log.info("here is the sourceAddress to be used " + payload.getsourceAddress());
+        RequestDTO payload= new RequestDTO();
+        log.info("here is the sourceAddress to be used " + payload.getsourceAddress());
 	      log.info("here is the sourceAddress to be used " + payload.getsourceAddress());
               if(payload.getsourceAddress().equals("benchmark")){
                   log.info("inside bentchmark function " + payload.getsourceAddress());
                   TimeUnit.SECONDS.sleep(2);
                   ResponseDTO response = new ResponseDTO("103","Success, Message Submitted Successfully.","tuvgvgv");
-                  return new ResponseEntity<>(response, HttpStatus.OK);
+                  //return new ResponseEntity<>(response, HttpStatus.OK);
               }else {
                   AfricasTalking.initialize(appConfigs.getUsername(), appConfigs.getPassword());
 
@@ -68,19 +84,20 @@ public class CoreUtils {
                           if (recipient.status.equals("Success")){
                               status="101";
                           }
-                          responseQ = coreUtils.handleResponse(status,recipient.messageId);
+                          CoreUtils coreUtils;
+                          responseQ = this.handleResponse(status,recipient.messageId);
                       }
 
-                  return new ResponseEntity<>(responseQ, HttpStatus.OK);
+                  //return new ResponseEntity<>(responseQ, HttpStatus.OK);
               }
           } catch (HttpStatusCodeException ex) {
               log.info("RawStatusCode to be returned "+ ex.getMessage());
               ResponseDTO responsedto = new ResponseDTO("400",ex.getMessage(),"-1");
-              return new ResponseEntity<>(responsedto, HttpStatus.GATEWAY_TIMEOUT);
+              //return new ResponseEntity<>(responsedto, HttpStatus.GATEWAY_TIMEOUT);
           } catch (Exception ex) {
               ResponseDTO responsedto = new ResponseDTO("400",ex.getMessage(),"-1");
               log.info("RawStatusCode to be returned "+ ex.getMessage());
-              return new ResponseEntity<>(responsedto, HttpStatus.GATEWAY_TIMEOUT);
+              //return new ResponseEntity<>(responsedto, HttpStatus.GATEWAY_TIMEOUT);
           }
         return hexString;
     }
