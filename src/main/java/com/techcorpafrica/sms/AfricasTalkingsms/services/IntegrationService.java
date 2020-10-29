@@ -40,6 +40,7 @@ public class IntegrationService {
           String dataBuffer = "";
           try {
               log.info("here is the sourceAddress to be used " + payload.getsourceAddress());
+	      log.info("here is the sourceAddress to be used " + payload.getsourceAddress());
               if(payload.getsourceAddress().equals("benchmark")){
                   log.info("inside bentchmark function " + payload.getsourceAddress());
                   TimeUnit.SECONDS.sleep(2);
