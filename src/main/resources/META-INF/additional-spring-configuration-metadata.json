@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "app.status.credit_consumption_failed",
+      "type": "java.lang.String",
+      "description": "Description for app.status.credit_consumption_failed."
+  }
+] }

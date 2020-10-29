@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: africastalkingsms
+  name: africastalkingsms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: africastalkingsms
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: africastalkingsms
+    spec:
+      containers:
+        - image: registry.gitlab.com/cnjiru/integration
+          name: integration
+          resources: {}
+status: {}
